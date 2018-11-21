@@ -1,0 +1,81 @@
+
+\documentclass{beamer}
+\usepackage{fontspec}
+\usepackage{xunicode}
+\usepackage{xltxtra}
+
+%% USAGE: 
+% \usepackage[logo="sklogo.png"]{beamerskoltech} 
+%   if you have a stand-alone image file for Sk logo 
+% or
+% \usepackage[logo]{beamerskoltech} 
+%   if you has no logo-file, but want LaTeX to generate it. 
+%   In this case you probably will need to use `--enable-write18 -interaction=nonstopmode` arguments running the latex command.
+%   in papeeria and overleaf all works fine
+% or 
+% \usepackage{beamerskoltech}
+%   In case you don't want logo at all 
+%
+% provided commands:
+% color `skoltechgreen` -- the dark-green color for structure elements 
+% command `\logoname` -- the name of logo file if exist 
+% command `{\csk <text>}` -- the shortcut from `\color{skoltechgreen}`
+% command `skfootnote{text}` -- put some text for current slide
+% `\renewcommand{\skbeforetitle}{\vspace{-3ex}}` is useful in case you use `aspectratio=169`
+%%%%%%%%%%%%%%%%
+\usepackage[logo]{beamerskoltech} 
+
+\usepackage{xecyr}
+\usepackage{hyperref}
+
+\usepackage{polyglossia}
+\usepackage{graphicx}
+\usepackage{listings}
+
+
+
+\begin{document}
+
+
+\title{\LaTeX ~beamer template}
+\subtitle{for Skoltech}
+\author{Anton Lioznov}
+\institute{Skoltech}
+\date{created at November 4, 2018}
+\frame{\titlepage}
+
+\begin{frame}\frametitle{Slide sample}\framesubtitle{with subtitle}
+\skfootnote{And we have footnotes}
+So, we now have the \LaTeX ~template.
+
+It was created using to look the same as pptx templates,
+included
+\begin{itemize}
+    \item Green line to the left (color `skoltechgreen`)
+    \begin{itemize}
+        \item Also green line below title
+        \item and green color for structure elements
+    \end{itemize}
+    \item Gray color in the title page for title
+    \begin{enumerate}
+        \item and gray color for frame titles and subtitles 
+    \end{enumerate}
+    \item footer with the page number (except the title page) and Sk logo
+    \item footnote (check below)
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{developing}
+
+You are more than welcome to suggest comments and ideas for customization through
+\begin{itemize}
+    \item https://github.com/Lavton/Skoltech\_beamer\_sty
+    \item anton.lioznov@skoltech.ru
+    \item Lavton@gmail.com
+\end{itemize}
+as well as modify the template yourself.
+
+\end{frame}
+
+\end{document}

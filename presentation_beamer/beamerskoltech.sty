@@ -1,0 +1,189 @@
+%% created by Anton Lioznov 
+%% Lavton@gmail.com
+%% It may be distributed and/or modified under the
+%% conditions of the MIT public license 
+%% USAGE: 
+% \usepackage[logo="sklogo.png"]{beamerskoltech} 
+%   if you have a stand-alone image file for Sk logo 
+% or
+% \usepackage[logo]{beamerskoltech} 
+%   if you has no logo-file, but want LaTeX to generate it. 
+%   In this case you probably will need to use `--enable-write18 -interaction=nonstopmode` arguments running the latex command.
+%   in papeeria and overleaf all works fine
+% or 
+% \usepackage{beamerskoltech}
+%   In case you don't want logo at all 
+%
+% provided commands:
+% color `skoltechgreen` -- the dark-green color for structure elements 
+% command `\logoname` -- the name of logo file if exist 
+% command `{\csk <text>}` -- the shortcut from `\color{skoltechgreen}`
+% command `skfootnote{text}` -- put some text for current slide
+% `\renewcommand{\skbeforetitle}{\vspace{-3ex}}` is useful in case you use `aspectratio=169`
+%%%%%%%%%%%%%%%%
+\NeedsTeXFormat{LaTeX2e}[1995/12/01]
+\ProvidesPackage{beamerskoltech}[2018/11/03 The style file for beamer class and Skolkovo Institute of Science and Techology]
+
+
+\RequirePackage{kvoptions}
+
+% process the arguments for the package
+\SetupKeyvalOptions{
+    family=KVAR,
+    prefix=KVAR@
+}
+% name of logo 
+\DeclareStringOption[nologo]{logo}[default]
+
+\ProcessKeyvalOptions*
+
+\newcommand{\logoname}{\KVAR@logo}
+
+
+% if there was no logo name try to generate it!
+% for this purpose we firstly provide the base64-encode of logo (below) 
+% and than decode the image to png
+% if no logo was provided by the arguments, we will generate it from base64 str
+\RequirePackage{ifthen}
+% xelatex --enable-write18 -interaction=nonstopmode
+\begin{filecontents*}{enc-sk-logo.64}
+iVBORw0KGgoAAAANSUhEUgAAAZAAAACTCAYAAACgXE/WAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MTk5ODZBRjZBMkJBMTFFMzhGRTVENzQwNEU4MjEyMkQiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MTk5ODZBRjdBMkJBMTFFMzhGRTVENzQwNEU4MjEyMkQiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDoxOTk4NkFGNEEyQkExMUUzOEZFNUQ3NDA0RTgyMTIyRCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDoxOTk4NkFGNUEyQkExMUUzOEZFNUQ3NDA0RTgyMTIyRCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pj/rjpsAAC1mSURBVHja7F0HmFTV2T6zBQSld7EgKIgtdo0mhha7JsYajQoaUZMYe/mjMWoSE6NJbIhdrDHFJLbELqKIooCAggooRbqAi9Rld+c/L/Pe7OFyZ+bec+7M3Nn93uf5nt2dnXtP+87XznfOSaXTaSUQCAQCQVRUSBcIBAKBQBSIQCAQCESBCAQCgUAUiEAgEAhEgQgEAoFAIApEIBAIBKJABAKBQCAKRCAQCASiQAQCgUAgCkQgEAgEAlEgAoFAIBAFIhAIBAJRIAKBQCAQBSIQCAQCUSACgUAgEIgCEQgEAoEoEIFAIBCUFlVhvzh8+PA4yuutaWdNu2vaSdPWpC6a2mhK+5Tbek3LNS3T9IWmJZqmaJqhabqmhTKEglKjob5CDTzzHxt/CgTliNMHLimsAnFQUAM1HavpW5p20dQiwvNbaepEZePH15qmanpL0781jStQG/bXdI6m1RGfa6lplqZbhD2LitM0DbAYr0o+c72mtVEeTDdUbGr6CJozBmk6RdMai2dba7pb08Qm54FEBIQ+XJahmvoWqAx4LAeRrtA0gZ3/iKbaGMvZVdOPLZ+dLgqk6PiephMtn63TdHMUBdKglcfgs59U9RuqpOcFwME0OG3xRjkpkLh9bljdv9A0TdONBVQeQdhH032aPtR0cozvXefw7Fcyn4qOlQ7PIlzaEMn7qK/YSAIBsaqE8qasFQhCVJM1/VZT1xK2CeGuJ0lthJ+bHVLFKsjzPvBTIGiOiIvzf6rpTU39EtQ2eCFjVWaRXiCIHeJ9CESBuOPXmu5MaPuQ7fWKyqzJCATifQgECVIgF2m6JuFt7K/pbzLUgoR6H1toOlNlkjUEgmajQA7V9OcyaSdS6y6U4RYkyPvoS+8dmXqjNPWSnhWUG2xzD5GvfF+ZtRX5/Y+qTKaNQFAK76OVpsNUJi38cJXZe+JhrfSsoLkokP/TtF2cc1LTPE2LVSaNEpsNu2vqEWMZ7Thx/yDDLrBFfV2VGnzWkxt/RgDCU0jqOD2Hp5GS3hU0BwXSUcUXDoI3gAX4v1CBmLuH26vM+gUyvE6LqTxM4JuV7BsW2CqPYaGVB9Y2jtZ0rqbBoiAEokAy+JGKZ3/FC5rOUtnPs8ImvHGkJ1RmIXxLxzJhCeI4lY9k6AVRsHHd46xQO8534Rw5LWYvXSBIHGwCucfGUC72Zxyhwh+G+B9NP4yhXFiBB8qwC6Ii5LrHXSpzEkLcIV6BoEkokA4qc2SIC+ro1kfFs5qej6HN+8qwCyJ7H+GyrvZVEqoSiALJ6Z63dyxzjLIPId0TQ5t3kGEXFMD7AFZLbwlEgWTHTjGU+aHDszhxd41j+Z1l2AUF8D6UeB8CUSC5EceRIPUOz65Q7qdd4vKqVjL0gpi9D4Gg2SFqFlYc6a8uXgxuKJxNBbDB4vlqlcnuEolgB6yB4UZJHJrZR2X2NOCz1r4+xZHUNZrmqMylWmV5g6TFXR91DsWtKVEzt9W0h8qEp5GliP1XyHbEvqkGjivmGo7JxyVu8ziWCEPj9O2kbcztwbbsREIyQxvKjDS9xPXs70WaPtb0mcpcTvd5mbAmLtrDIbHdOP+qODZfco4tSqoCiUPwDmTjF9jMaZXZyVtlqcxS9ICSHqvGXpvvUyClLccVmzFHcbK4YC9NR6nMcTD43XYNbA0FDi7MQTLEW2XofeBwzrZZvOj1yi29fS++I9+NnRMsjScTOEYFF28do+kAFe2WUBMwxpBR+YzK3Aq6pERDheSFo8mj+1pGGDDXEF7HqeL/0vR6wtixP8dsEBV+lyzyeC0V/HiOywuqgPveoiqQOI5bgHVzFwWkLdM2dWDPy2DHd4x0UB5QtKeqTLbct2NqE7yUb5Ku0vSBpgc0PUzrKVnKQ3sfQ855QtXXVpsf38P6FwIjQn5vawdP7huartR0ktr0GBVbtKdxAfoDx/OPlsahDdCOC1TmLqI4ZOGepAvIn7eSP0uJAzlfjlXh1tigPPcmnUeleIemewtRuagexbyYyoUmRVru9hIV2gy/iUF5/EPTTyyf/QE9hcdiVB5B2JOM/ZFDXQuGVEWDeuW+U1UqlfZ7wKVEvbILk8HDwAkMk1RmP1VlAeqGkNclDAUVejwRhXhf019jUh7Z+HMU+2xQMVmPP1tyfoyjvLRN0NiNhs84tqmkCmRqjGXD5ZxCb2SAkoVtRa/sasd34DrhH1k814kT8imGaoqFbWl9j6Wbnigl4pu2pVYgNuVjveo9TZep4mSJdeR4/l25nxzhRzWFIcIy+xSpzyF0X1WZm1aLgRX0MjFmP4vZk3mbXlvJFAgWRT+OsXzEk89XmXjjp2Q6/L0LmaU5Ad7Yo47vwML18Sp66Arx9wlxM1dEHKTpXXpAgniAWPlb/FlsnKDpRc7xOLANBeDwEvXlLzQ9XoRy9lOZdcJCGHGtaCSeXSoFAgvopQJ13DZkursY1viILuRQlcmmaMo59ggxYOFuK8f3nGyh4A9WmYXDJIQT29AD+rHIfmf047iWct8TeOs55R4y247Ko9SnSGBd8KECl/E7TTsWuIz7VSaZqegKBHikSIMFpXEmBwxZBZOpXH6omt45Q3fRC3DB1bT4omA3GgRbJqw/7lPxnH3WXNGaBknbBNQF62h3ODwP3sRZeNsmpG9h0F7UBHjkAfJJ0RUIQh3PFLmxlXTpEN56ggoFMUIsDGJBrV0ZD+Q5MbiUcK1vtLD2n46DiQgs8G6IsV8epoITRAduCrVdT0LWwBjOres0/UrTgyqzV8IWmLeHOgi6uK77rY3pPX9sAryJI51+7voS2wulLlaZG9ValKjxrenOgrA4uJjuOtJfscD2dZkMIryOkY7vQCLCMIvncA9Lb8eycSoA1m2QUTeHSgQbmwaxTi6ueDXfjcXSkixeI5W3DG+OQVaS7ToBYu8X0tsPGo/TKTxt9gLdQaEbxcg4UWXCsi5AKBwprG+RX9tSmaGdXR0M75tUJn25nHEOx9Pa8LPdGAhr5NwEdQR2ZJ5ABfIxBzfpKcLIVnlKucWHsQv4OAsGQPzzDMf6I/EBu9KRsvlflcn++kTTO/SGICxucywDGTCXlmJwspyBVepQX3UIfrne8t3Pki8mZ/n/BnoiWNdYavH+vhEV2xYUbi4YSR66XdNElUnUed/gz0kO7z5SuYedw2AtPUJ45KM47+I6tQAG5H6l8EAUG9OLLm6SgBS4K1TmJkMw0A0J9UgeVu4nAx9vGVpwTUl8m1Zcrj0JyATzYsUuN1hiExXWRJKwgRQWOtIs1/n1DY2x71p65WkKhpUqe/ZhBcvJlWG3t7LbswDv8SQVzt+CoYCNdk9aRi7uDWnwQNm4rHs8r3LvR1nKNmOjXUvLMs5wVEL5cA+V3Vzf5+iXa1Q8GWkHcD4XXYEA13Fi/zmBAhrW4mVkErhqLyWobrhw6GjHd6Btoy2eO0S57aaGRXSqCr+h7TJaa7ZnoMFTw76WO4s5QBUVDerVB05Rg4b+zfRCLsnjHUAQ97AoDgJ1WICgiIqhls/9NkAp5gJSQS9X0fdi4Pw0rFk+l+d7KRqAtkBbzg/xvZkqs6Y6zLKcAQVkwasYSQnCPEaAlvN7LnBaX4rjbKtbKQznqWQCGVsvqvjucXfFkSr6gneQ92Lr3g9zLHskBWVYQNH8xrHMM0oxUKnKho0UEkhKqHSYh64p3FBgx1k8t8zSm7A94uPEEN9B5lZfh754OoI8+rdDOQjhblMA1vtXDuXhN0QnOpbVvdQKxHMXd2WjV6lkAoru5yWuwzbK/Wyddx0sTQi5IxzKRojjAYvn/qncTm3dj5O1qPC8EPwMo28ci3Ndrj/IUpghfGET4h1rWU8oh3xhvmNiEMBh8alDOVsUSIFEWcdyXWfskgQFosiEcKf6swNmJlCJoLMPLmH52GnvsrHry5AWXDYg3tnN4XlYO9MsnoNR8Ypj3w0uxYBF9EJKie9YPveO5XMzyI82EYFeIZSMLeoitglrWi4nVsedrAPFPDnC999wrL/TiR9VBWDkL1RmbQRx1QG0eAfSQ0nC8SSjWJfaIpcL5XWgo4V6vHILFbqeJPuew7NIo3Q5KgXKb0SxmSXLWkgSYbtLexHlQMuIXlADhW9Ug6iS3mQ2y7+rcjsTDUklUU4rhhIcQtkU1VLAM1NiHscxEb8/l2227bM29KTW2TxcVUCGxsLgyyRgB1oWg+gF7FiiiYZysQB1RxHLPE25h89+bsFcfrimHbrEWz90LHv3EvFLoxeSXAWC8Jntnp7fq0xGTxTjDooGe362tiyzX47/oR0uO+gXRzQO61Wy7qaZHPH7aRrt/R14xzp8WlXEjvmchKNQWpCJDqF3sk8ItzZO/ITWbKFjE8vZrnsc34MstziykFyPgJnv8OwC1ZjuaoNutJaKnpJdBl5IB2W/Ka6LcoyDW5aZDd0d371IlTds0tVLdZFXURWICVgIU0kj6ELtTg9lgMosmnYvYPlwofdX9vHfsEB8FJvsXDegvRpDXWDVuZ4ntNjhWdwCucrBumxdKgWy0Uzb/Gj3JAGpzuV0nE/XAho5i1V5o8ZybpUESTGnEH9DfP1PKnPzVj8qkutUZvG1EB30nSK0C3HlTjG8534KCRfgKGeXVFHvXmxbQPC77KBtrZJ36GNS0EmV7lgh2/rm8jSLbcEnCTZrsyWT40kN6kJQIbsA2VzY3YuccISd4szs2r8I7cA5PENjeE935b6AvIWjx7neUQHUKbvb9DZxBERXZB3bckKuy+MqmzmPlFX9K8qknoifYwMbFoGfjumdxTgSHrFeHEX9zxjedYpyP1jOBekYeC3lOLEqlCAI5Xb5WkcZsqaBiojfbUVmjUotYnKxEUPHbtvJMbwLJ4q2LFL/IoMqjjDcXQ4uPkJQLkkDlY4ejKsCQphzrUzZJmF1NxSQT9LCDsVDFIGA+3kvV3b5wikKoO/HIPzBIH9Q7tdLVsXgLocFspdw7MDtMVhuCGWdYCmA1zuEO1zXULZUbvfer1XJPeWg1FhfZvXN5YEsdXz3VsIOyVQg8CBct+23j6neHyi3lFBPERVzizH2nWAj3bcc34PNhDhc8LGIz2ERG5umbLN1YAR0cFQgLovgq1X53PNSbLh4ZkjQWMj5XQzrHUbbghz//8Lx/V2EHZKpQJbFUF5c58ZAmNQqt8XDdAlcf9z1PU25x/Lhhbyuou3LQAgLhyD2cSi3h8OzyLxxCRnOUMU/PaBcsIRKxMbDw/l1STp2aIHj81E3NyLE3l9F31CXJj9DLn4uCqTwAwsMUO6hJ6Ua12JclVCxY+q4cAlHvPzS8T3YS4HNiVGPhHdldJfTA1yvJZ3WhOdhg6P1v5zU0+LZ7glTILNVJtvP9qrlqAv02Bs1ycGow8boM5urAqmIOLCu+J5yi4N72Em5r18sKFGfXx+TMMR1mmdFfGasY5kuZ3nt61j2mCY8DxE+cgnvIbRne0Za0m7uRAjL5YRcHJkUJYzV1jEi8KVqxojigXxOJdLLoTwM7JUqs0HQBXHcDzGxRH2Os3cQyno7hnfhgMbXI3gWrjvv96dlGHU/CMIDhzqUi0XicU18LrpukpxiqeD3sIwKQOmdrTKL1g0Rnxuvcp+ugLOp9nTwzuHtjg75/TaO/b5INWNEUSC1HPhejmUifINd589bPo803hNiaHspD1AbR+HveskVJi+uCP1uyO9PZ9/b3oPcnYog6iU8g5T9jYTeWC1s4nNxT0cvCxtvba44PYxGXVRgPfMuy7pem0eBYK/Xzxz6YnAEBeJ6z8yHqhkjquv2dExlPqPpPItncart32KoA9zOsSXu+2tUPLc4DokoOJ5yLM9G6V3pWOajZTCXUsotKeNsx/JfVHYnBXxD2d2/MdChrvmE+xjHuRHlzhyXe2aQGj9ZNWPYKJAvYyoXO8vfpSKBdRqUUYV1DsRosQsbZ2I9puI5ABI3ltWUuO+xp+GnMb0L19uGXeB+WLntpxjA8QiLkyN4SNmU/VNlMJfWK7f9GAgl4a5x2wMvkQ30nOWzv7N45nLLsrDP44MQ0Y57HfoSZ+mFWdhG0sHRDuUgkrBANWNEFcbIXHogBovSw/4kMMwiDgZSEpFy2p6TCWl5cW4OwhrELQnp/2c1PaHpVMf3oH/up3DPB/TzCMcxRFmzVf41FVh3Dzm27VZVHhsI1yn3DX0nUaC9x/6FUkB2FjIOu9GgGpajP+5Udpd2Hcx5HdYLukflvtMjF3A6dZj9PF6I1/YGz9tooH6cpx0ua0/l4BknygMBcDfFypjrgYU1nE2FRUCcxns8hU9fFf/OUkyyTxM0BhereE4QxenCYS+twiVCLsdeY9K9qekKFXw0N+Lj19JrdMm6QxjjT4kYpRSPdM+ODTEputYcS1jQl2i6lOMKT+7IPHMWYzLastyzKNz3yPGd3RiFGO7QvrCnMXxNHrIFNsy+RYXrv0KgP6MQRzny5hOiQKIDgueiMm3vLJVZe0gSllBQxIGbVLibyaCwzonBe0V5WJjHgujjnFDICkOa8vUxtAeCKhHnX3mXSlXkViKF3lD2tcq/X+Qyh/cfrjIxfXiWCDFfTYLHiqzBKTTwbPGkpgkRvj+S/GQLbF59UGX2X71Kjx+JQLiH6PuOY/FLVX5HyMQO2/UEhCWQWfOjMmorLMQTExoOQX9iXeFQx/dgHek+Fe64lGepAFzDkR3JC3EDoasXkjRIIS6VmhCDYHLFBAq3Xzu84wBSnMDah00CBmQM1kxcjijpruK9oA5ZiA8rgdMGGri8L5ZJO7HugbDYpATXEdb2uhjeg3h22AXOqxI6ERBeuLgM51NS5sNvVLISD+C2naTsrl7FuuhglZyLouDNNNud53EqkA10Z59PeBuXkgGfTXg95yj3I048wPrcLeR3h9LaT5LyOLlM5xMWv99JSF3Qh88loB719PxHO7wDIacBqoR3fxM48gUZhSuVwFmBAMieQtbInxLavpdUZtPcG2UyHrdQCLkCh7wh9ht2XwKs/XOV242DcQDpyD+gcZI85F9IBy5LSG3raeDdW8I6wCg6RMVzoRrWZpBkM6aEsuQgFc/eLVEgPlxKC+H9hLQLg4zjQg4jE5cTEMqK41htKM6rInwfggbnVf23BG3G4vNRCRK+wZMl3EL6WOWWpRQn0jQM4I3MLXLZWIvbR8VzZI/JJ8hQu6aIxg6M5F9RlixVgoIoEEUrH0ILu8XHl6g9yPlGainOwnkgPrvTGjYHPn6g4tuncqOKdoghMqqO5GR5qQjjhZDEdSqzG/o/Mb3T5ZDNvCc8pyobNlII4QnrP+50cdsTqHF6A9JzkTRRyLObalnW/lSiywpUDk603l3T3apwd8TAC8Y+Dxwxc0OR+M9W3lSVaL4U5I5ppHIigwOZQIitf1IENxnKAimIiPvfHDNTpQ2GikL1DqEYrIVMMd5hS55nEXWz1EtUIhA6yMV/T8V3FwfScl9WmbUXbEa7Pubx8q7utemvvEkMIb0Q4FkKH3jCSEWN40rjdQ4GTQ09UqR5n8H6xbEwvZrtQxRiF3o776nC4zNN56vMXrELVGaNJY602knk+V3YT9MjPu8dzW/Df3VF5vk69pm1Ekml0+GiJcOHW3vlFZxI39S0Ny0HbBrsGNGiquckmEvLDumKb/FnIfOxsSFpawtlUElhaRs6wO1/3RyYysNWVOKu+yl6cxz35aTFETOdWM+WHMuUoXRrOV7LqeSnMbyDMOcXBRwv9Fl78ktUPsUknKXyhBAb6ivUwDP/sfFnBGxDoQRvCycs4HKuNhyflqrxhswa/v4V+w5HuSxgvebE7NVgl/dejBzAa9+BY9qGVGkIqFWkLxlKms65hwXu+fZV0E1NcajSlY4O/8aDXr3TLXZjP3dmW0z+rOd8WEaPbCoVx9v83QWQa10t5y06YLaFPOvGeVhnwfMY289PH2iXn1AMBRKE9mx0Ow4w/m5LV8ys0EpOqKX8uUQ18/P3E4ZqMi52m7f2Kfs1HL8ml7FiqUDKBak8CiSma289xVGv0nMy6/yp7YdninRXJH5DrI3hhVfQk1tFBVIn01gpWwUSOnbW0NCgUqnURooBX6kS5nVDaYJibE9zxQZVhNTKpI1XOt2QkTupiriFXRKQLqzi9ysO/XsqEx1Nzxm5UYHErEhWkAQFQGgFMmDAgI2T97XXXlMVFRVlKXghhKAIBw0a9D+BVKr2eJ6fKLDyGK9N6jN4kKqfPWCjgCuQ1VzqUFARFYfh0KTq+P+CKBJBIdzVsCGsRx555H8CDxO4nBSJKYjw02xzsdtj1gUopQIzlViSxjFJ45W7PikKt1IKu6KFgmJUHPUqfyQsCX2bQ0n/76NC16k4ZRZ8DcRTIEET2RNASRNCHgUJos06osCCKZsQKqUCM+tQ6nFM2njlU2SlF3bZBLPavC5F90pMoRdVcYTo26K2J0tbNqKQ4x0wvgUss+gKxJzIHnlCyP+/YlrT3t+egPT/L2+HxCyYwgqhUimwfONYiDFM8nhFUxwhhV2sAi+sRe/VRQXXJ7Y6BVjIfqFnpThUQtqTqy2FMBzyjW9hjJWSKZAgIWT+7VcqhVAepjUdJKCsOsbnYbnULYoQiqNc13qY4xj3GCZ5vGzHLLewyyHwrGBj0fvrE2ed/BayilFpJKQ9eduSw3Ao2PjGWaZWIAOWl16BhFEqhfY+YmdVh/q71C3OfnPtoyTVpdB1LUz9ggSey+vituiTUB/VBNoTUx0ilR9PmWecaXcpalWhh7XQAqOp1j9J/VZOY5jMuqaZYSR1atrtKUUdStvuJrkTSiAQCASiQAQCgUAgCkQgEAgEokAEAoFAIApEukAgEAgENoiShYVjqOVAGoFAIGhaQB7whEIrENyyhiO7G6S/BQKBoMkA99H0s3kwVc57NAQCgUBQOsgaiEAgEAhEgQgEAoFAFIhAIBAIRIEIBAKBQBSIQCAQCASiQAQCgUAgCkQgEAgEokAEAoFAIApEIBAIBKJABAKBQCAQBSIQCAQCUSACgUAgEAUiEAgEgrJC6OPct99+e+/Xnpr24s86TZ9rmqxpme+RgzSt0zQxproeqDJHyY83Pmuh6TuaZmuaUQb9vbOmbTW9pWltkcveQtP3NM1n+U0JW2r6tqbump7XtDTHd9uSf3ck/6M/PiQPRUU3TYPJ4x+LOMkL3Cf0TcqN8Vm+01XT/prq+XcDf69SjfcR4ec7mpbHPDch097UVFuCvjlY02pNH5RqcObMmVM4BUIcrul0DuoilTlH/lAKwyc1vWB89yRNK2JUIMeTkcb7BMdwTc+WiQI5mH04uYAKBJfD9GDfr/b11QmaJvkUSDdO6GUOZXbhpF5Sgj5tpekKTbtQCbye47t9NF1MITWffIwxOUPTy5oeizguW2s6jgJHFEg4nEK+zKZAwLvHcq7jronW5N2vaZB6UZPPYlYg4IMhmt4vgQLB3PmhpnmlVCAF9UCooc/W9J6mBzh4nrA6TVMb3/cxEdfHWNd1avPLrBpYxvoy6e9a1rWQl3J10nSDpkc0jTY+/0rT1ZyIHjAZL9L0haYRDmX+mIL82hL06U5UHiOpPNI5FM0lbPMv6DmnybdHa+plUTaUxjUlUpzlivWcy9kwVdOFHJs0Bfv55M8PDS+ktgBzc50q3YV5a0vk+RRNgXiu5/2G5q+j1vy9zIvEYIPKhKv8EwEW3acBCriahoArH1WXqL0t+fPTHMpDUcnA87hZ00zj8xpNjztM+k+E5UIjzO11DT4vsNZQPIU2FFMh6yiwUCCdOLA1juGG/lRAs30D159lIPQyXTXGQG1DKghXzFKbxsO98uEWL/IJkt78/zQfE1XymZWa5hqf96VAWsVnbK2HTvTiPtK0A8Miq2jdBllqcOf78ecaWtLLjfbtxEnYg3Vcyj6t5HP4fSEFfi/+3IrfXc3QTorvqVWbrw3syJ8z+b0dqLBa8P21rJP/mR6s73T+jOJhdGOfTPcJkQ6atjG+15oGTVAYyvOQF0Ucnw6sf8sAnvH6ex771UR79mk1/z/X9/8t2F+zjL5LB/Csf/70Y1uWsT/SAe3sx/cvYKgnrCJGfdsZhuH8gPLR3hksZ0d+d5bKHgL1xm81ebzW8CLCoML3M6jeu3I+LA4wkkz0IR/Wsg3+MatjfyLa0pmyblqALNqRhho89905fxar7GH0asoQ9O2XHLco6MF51sAysvV1b8qPtfTkurF/ZlIm9qTBszagPS3Y1oIpEAiSA0hvWwjKSoZL0JE3+QToBbQQV5MR0Mjb2NlR0VHTrymkfuezQH/C/6/noI+mR4W/91SZOOT/+YQEJuOvGCKZy/qdpzKL+qs5URfSxZ5pUd99NJ2lMmsT/ckkmJxY0bqVTOqhP/tqKyqXFhzDf2v6BxnhfDLNESqzPvVXTS+xnpdrGqPpIfbDxez/zmS+SWxHin212NeHwDD+vJrlnEPmxsS7ggLrRv7t/f/bnIytGEK7XeVfM0A/n0vPdxWfhUC7w1BqCG8cz99P56S+Ocs4eIpjAMN7YfBdTadSANSxTuM0PciQICb2LzXdrelV4zksAg/n2NRxvP6j6VFD4Hclr0Godmf7WlO43acyi7kqC/+u4ztnki/n8Tu7kT9akaeRMPCKplHsm2zoy3d7BlE1+eUF1tnzZnty3KdRUHnGxyryzQTffEdoc4ghsOaQt+MK+YHff04lv5ZKe6yme3zGVxuOhzdnq9k/T7B/PM+ngnOiH5XGlmzrrT5l8yNDwfTkc63IA/dzzE3hfxHniCffINzvDFBgQThRZdbZNrAc1OthtflaH9bxjjH6ej7rBD69jvW9mn3zis/QQej5g0IrkNc0HcIOPpBadDErujjE82Cmvak8PjKYDAy/HT/HhNienyEOekMexg+y0K5kR99kWHJgsMuokP7Mn/tSEayhQAXjYYFvP58AOoiD8j7/PotKFIJsMrU8BN0lFNCrI45BHfuhKwXvIkNRnMvBr2fbLmSbfkvma0OB6Fm30ynwr6VCGWdY+2m+x7OmllL4Xc0x9AuZdJZ4cIMvnn0TeQIC5xbDigNOIM/cSuXUmX2Osbg0jzd7ZkA/n0cldQWF1ssUFOdSgH2uNl3jMQHL7S1Osr4cz0W00hf4Jr2n2CF03qCCXsX6DDHCZg1GeNAvMN6jgFrNMTqT8+RF3zP9qYAmU5mfw3bOpGGi2PYraUzcRgEMy/5k8vY89u1lNL5G0WM+gAYFPNSncvR1d/bbCEPwwAD5Hr2Lt4z2el7n3eQ3b1wuIB94QvHb7KtnNP2Xxs4ptO4XxKA8tmR7l5PvwM97cY6soRL2ohvDOd/BS1M4b06jR/KqMTfacC5eS8G7F/tvKHk4bYSJu3HMbme/HMb+mq0ak4lakhc6UJbNpXL6Gfvs93lCZsgwPYn89xLl9SlU9osMT2Z/8jX6+VnKPxhWAw1l/QnLH+hTILsayi8youwDWU7L/hVaQ8NoQd1JQbRtjmd/oDLpjiMNQazIiGjAY7ReajjAD5HR+oSsmzcZf8KBvcmn1L5J5hjBCVHDDnuBHeq5v1OpHKuMMMMBFAYrOcEP5oCO4Xs+pVaHi/gNy7gr8ADfhXLeJSPsTIvTsxRQ/vOc5GtYZ3gY4w1l5Lm3X/P3tT6lkDaEwTL2XS1/X5nlu9ni2GlOtFqWvdQQIFvSgv8bPda1FHR/pNW6X56w0SEUekH9vLehwLw6f0Ue3ZCDR0ayv7biRLyU9bmZAsYck2NY3xEU3F9R+F+Vx2AaQqVxK78HxfMcDZSj1KbrTZXkQa+Nn5EPWlCxeDic372FirCG8+gqzhfPs6piuQtZh9dY50MNpReEMZzDM8hXyzgnayjw/PwK/n/HGJdHON5mnb/F9j9Gg20BrfO1Knr2ZxD245z4IwXjWvLZ3yl42xky5kB6UmM4jt667b0GP1eSd+6mIbKC/fcmw1StfIb3Eo7VYvL9Y5yX+/miF72pzD4kr0KWPE4e3jaPbD6MPPE4y1hIJfgV+UwZnvgKjsNS1ulByoBKY76PpuHRw3j2QMuwWmQPxLNa72FFO1Kg9aKbBWa+xueWfU3t+EMy3Gu+923HAfTHaWdxwm+nwqVHrqE1diDdu1m+//fkpPBbPh9xcnbhhHudFkxvToxdyaRvGpZgpdp84XQe27qdRXjPc0v9bv0Sw6syBeQpBgOv5pjU+oSSUuEWxvPFl6O0IRUQt/XWafqwzp5SWk1GfiVHzLcygKkXUCBva9neWnpm/ybvdmRZR9CavYFufBvy9UsBSjTf2lwvjskOqnHvwgbOix4UbGb66fwAQ62W4SczfBUUs6/3hXOWMLRUaZRbw3Z2DigrqO5eAkalyp6RtCJALtRT8Xn80JnzMO2TB4uVe9KGYqRiJeduJ7a3nu1tSa+qhnymVHB6bNrHw+vIX8o3Pnv55kgFx8nfPwvJ86Z82xAg37wIxzYBa2Pm2k6XgFBmHZ/fxvhsa8og04tex/liyvjx9Lz2o2cIPt+DRkZtMRSIh7Xs2Pm0gBbQxd6Pk86brP0ZCviC1nkfn3BvERAW8VzEOjJzPqyjAGhHRh5CRWCGklrTWq0PUDxpox8mkoH2pwI5QDUu6ntCKh0QJqnju9s5CmEVIBgbjD6/lZ7feYbAXkGhOFolC63583jyQoXPs1mZ49mWARPcDMO1cqxbHQXZYo7tJPbtkVQgrUgrLbzJFhRulxljmGb7lwYIz8oQUYFWIcI+VRSal/n62hN2uYT2tuSpbclnacPrDfLo8rUhxXJXBYxfXFlO1VSyFxlzIc3fa4y53oGf14Ucv4qA8UiHjN74s7iqKJ9qA8LA6TzyzVuHCko4WUkF7ZfJfqz3yXiP3w+mAtmD89R6Y3FVTIM5gwPUyddJ3RgqeoJhpeH0UjYYE1kFWK+VrFttyEHHxLmLygku7alGDNTr3OoAq6oln28wFMp4Kr2n6Ga+qRozf7wY8JYBzBQ0YeLGdHp6XTnwWzHUch7bPi+LdWWr0LKtgYS19hXDkVN8Ey6dZ2w3ZOEL01KMEyvYdx0Mo6Q2YJzzwVs3wlj8wZhfKUNo2PCIt2ier+z59KIqfeWqHOWiP8+lNXqDalw3rGbI2lZGpGNQ9Pnev5LypC5He7/m55Wq+GigQVGdJWydbw6szxJ6bO2bm2nDYDOxRYDixJreT+ndHERvZl5cVq/KY6XskOV/25HRVvi8i7mMxa1k2Ks348BmSCLFEJM/5FSpNs1AyibQWjK2+TrLe44x31184aDOPgWn6N5u8IUUxvJ7x3JQ3jD+t4yDtUNAyKWtimdxMAxTLqJb7K0XVVJZm1ZUKgIP1AVMzrUB/eWFJhryWF6KddxAvlnJEJxHNSr3ju8lfN/2vs87U9AttOi3doxlB2FLjmGNYeHNpYUWFfMYXqgz2ruC716p7DaqzaD3nksgz1aNsW1/uTU5Qm9tOS+fozDxvr/MiBBERT3L3j5A8HVWbin6HubSQ2qZp72zjLlebCxg/bYOkKUptWlKeYWvX2rZpr4B7+2jNg15L6TMrPZ5rd0D5vYEKtUj2CdjXYzNKAoEWVQ30s3vyomMAcTi4wVkuPd8715kaFlkBGHh7yRDYcwg459OoVzNyTeUnT/T57b1ILUKGCgP/6QVdY6hvcdTmJ1FK7MFQ2rHsF5fGc9/zOex8I+1jjk+wYZY6nFUUC2oyYfR4inkMQRgJKQT72m0H0LxaKNunrVaz7hthzxCIM3ve7n6rYzPoZx2ZEiwFYXsKfye33JaxknRy7Daa8icx5FHtuB4oP7X0ujIhqUMJ57s6+ehDv18OMs9m3Vty/7rw7AP/n7BaP9/2eenkNdbMqR5dYBiNTFaNaaNdiBPd6TVd7Ll2L/MfvXSeKtZb+yo39Uot5reRCf+3oHz9owcBsUaCt4DjRBsK/JV25ChnyC8xzE+yuCfE9k3dTHMh/cZpj6XPFnN+iPGf77hccyg545+2I281JZ8cFoRIgZLKB88Ad+b5UK2fe7zMrejgm3FOTya/H8kP/Oyx7qoTdN43yRfnE3Z3I19EDR+X1PmHc2+GO/SwCju6UOs/DAy5BoOUmt2xD1q0w0uLQLcqocZa0Ya23V00ZBVcAlDXJ6ngKyAP/lCFbCQruTn7/I9ngeyha+D4O1cylDWKCqYEQz13EYh1IVCclRA6GU8B3OcTzvDeryXcdfrWd92VE53qfx53dVG2Mwcg8osYTxTyXtrQlezn1cZguJB1bgYB8H9NIUVlOSjFEApll3tUyBPsf//TEYcyf8h22tnTtATWJ9VqnE/h4nnWRbCNpNV4z6Qh9k/VxreG8Z3Wh4PJM1+vsTo5/YGvyzL0U/Z8KJqzAw73AhtbEXjZIRqzGjyPNEeFHqHkhe70KhI+co059FMhk+HUnGuZN0bfLxWmWUOeusoVT7v4g4qpdtp8HTlPPEExHy2YTh5/CvVmJb6RJ5Q42M0Am+j8m5Dnm7wGSApX93Nzyt9n79CD24oDbUq8s/SiKGtbOO7gvX9GXl3OccX7/6XUdd69tmFNMCWGgrtL7552DJgHlZx3qV8si1Idrbw9ddq1vEihta/5Lhhrt5peBxpztkL+X3Mw7tp0PSkzD2WZbbleE70eRXP8DsDOG6fkG+C6vkmeXqqctyTk0qnw3kvxmm8vWn9dFaNO6Gnq80X23Yjc38cYEl3Z6NXGyGEfWgZzjfcLBUQKurNyfERO2dvunD+ON7e/P/7RtigC8uBtsYi+aQs7jSEXn928OosimAfek3LWN8whxFuz7Z/oBrXVbrxPZPUprusu7KfPzCErbcrvjcnuZd6HJRW2o/vmEUFWknrf6naPPOjJ+vwpW+8WrAfe5PRxtEdx0T70PeOLvRY1lCJmJ7oHhz3NPt9ashQjle+V7cJavMD9DqyrVNDri90Z116sA7zyL81OcKze3DizuQ4bTBCMnuo4N3jPahUO7H/p/h4pBXH4zPf+LWg9zgvICTahf/rkmOedGW5XfneySr36cQmD3j1XUwjzct0mm3M02/Qql/qC00F9UM169uH4/Y2+T3KrudOHK9pWcaoA/uxJ3lkSpZQslmX1RzHeb5x7sbP63z90oPz0Pt8VyoU/xzYmfPsI9/nbSgvejKiMVEFL45vwz7/Um2a6dnfkKcTfVERv3zpyXdjPlzOMful73uIFCB1/RaO80bYnMZro0AEAoFAkHzcTuPaf5oElgy+Q69zrYsCkQulBAKBoLwBD2eI2jRrcAg9p7HGZ1X0PrCpe7yK4UqJKul7gUAgKGsg9I8Eoe+rTJgVa24IsyE71dzjcTY9D4RSn4mjYFEgAoFAUN7AGh4SV5Cai3UcrOsieQaJI+ZaI9ZVsEaFU0EWxVFw6DUQgUAgEAhMyBqIQCAQCESBCAQCgUAUiEAgEAhEgQgEAoFAFIhAIBAIBKJABAKBQCAKRCAQCASiQAQCgUAgCkQgEAgEokAEAoFAIBAFIhAIBAJRIAKBQCAQBSIQCAQCUSACgUAgEAUiEAgEAoEoEIFAIBCIAhEIBAJBifH/AgwAvJQq0g47iCYAAAAASUVORK5CYII=
+
+\end{filecontents*}
+
+\ifthenelse{\equal{\KVAR@logo}{default}}
+    {
+        \immediate\write18{base64 --decode enc-sk-logo.64 > enc-sk-logo.png}
+        \renewcommand{\logoname}{enc-sk-logo.png}
+    }
+    {}%
+
+% https://latex.org/forum/viewtopic.php?t=4392 <-- link about creating beamer thems
+% define colors (green -- for structure and gray -- for titles)
+\definecolor{skoltechgreen}{cmyk}{0.06, 0, 0.86, 0.35}
+\definecolor{titlegray}{RGB}{89, 89, 89}
+\setbeamercolor{title}{fg=titlegray}
+\setbeamercolor{frametitle}{fg=titlegray}
+\setbeamercolor{structure}{fg=skoltechgreen}
+
+% new command to point some ideas 
+\newcommand{\csk}{\color{skoltechgreen}}
+
+
+% create left border 
+% https://tex.stackexchange.com/questions/415968/beamer-right-and-left-borders
+\setbeamertemplate{background canvas}{%
+{\color{skoltechgreen}\rule{10pt}{\dimexpr\paperheight-30pt\relax}}%    
+}
+
+% customize frametitle -- add hspace and horizontal line
+% https://tex.stackexchange.com/questions/415621/how-to-customize-the-frame-title-subtitle-main-text-in-terms-of-position-and?rq=1
+% to print vars https://texfaq.org/FAQ-printvar
+\makeatletter
+\newcommand{\skbeforetitle}{}
+\setbeamertemplate{frametitle}{%
+\skbeforetitle{}%
+  \ifbeamercolorempty[bg]{frametitle}{}{\nointerlineskip}%
+  \@tempdima=\textwidth%
+  % `\advance` add to \@tempdima the next margins 
+  \advance\@tempdima by\beamer@leftmargin%
+  \advance\@tempdima by\beamer@rightmargin%
+  \begin{beamercolorbox}[sep=1.0cm,left,wd=\the\@tempdima]{frametitle}
+    \usebeamerfont{frametitle}%
+    \vbox{}\vskip-0.25ex%
+    \if@tempswa\else\csname beamer@fteleft\endcsname\fi%
+    \strut\insertframetitle\strut\par%
+    {%
+      \ifx\insertframesubtitle\@empty%
+      \else%
+      {\usebeamerfont{framesubtitle}\usebeamercolor[fg]{framesubtitle}\insertframesubtitle\strut\par}%
+      \fi
+    }%
+    \vskip-1ex%
+    \if@tempswa\else\vskip-.3cm\fi% set inside beamercolorbox... evil here...
+  \end{beamercolorbox}%
+  \vspace{-25pt}
+  {\color{skoltechgreen}
+  \par\noindent\rule{\textwidth}{0.4pt}}%
+}
+\makeatother
+\makeatletter
+% global renewcommand. From https://tex.stackexchange.com/questions/51733/global-renewcommand-equivalent-of-global-def
+\def\gnewcommand{\g@star@or@long\new@command}
+\def\grenewcommand{\g@star@or@long\renew@command}
+\def\g@star@or@long#1{% 
+  \@ifstar{\let\l@ngrel@x\global#1}{\def\l@ngrel@x{\long\global}#1}}
+\makeatother
+\newcommand{\myfootnote}{}
+\newcommand{\skfootnote}[1]{%
+    \grenewcommand{\myfootnote}{%
+        #1%
+    }%
+}
+
+% add footer with page number and logo. 
+\setbeamertemplate{footline}{%
+        %
+        % \show\insertframenumber%
+        \usebeamercolor[fg]{page number in head/foot}%
+        \usebeamerfont{page number in head/foot}%
+        % force LaTeX to think, that the page-block has no horizontal value.
+        % thus we can centerize the footnote
+        \makebox[0em]{%
+             % move from the border
+            \hspace{40pt}%
+            % remove page number from the first slide
+            \ifthenelse{\equal{\insertframenumber}{1}}{}{\insertframenumber\,/\,\inserttotalframenumber}%
+        }%
+        % centerize footnote. skip from the page border
+        \hfill% 
+        {%
+            \makebox[0em]{{%
+                \hfill\hfill%
+                \raisebox{0ex}[0pt][0pt]{
+                \parbox{\textwidth}{%
+                    \begin{center}%
+                       \myfootnote%
+                    \end{center}%
+                }}\hfill%
+            }}%
+        }%
+        \hfill\medskip%
+        \skfootnote{}
+        \ifthenelse{%
+            \equal{\logoname}{nologo}%
+        } {%
+            % if no logo -- pass 
+        }
+        {%
+          % if logo exists  
+            % force LaTeX to think, the logo starts at -1em and has no size
+            \raisebox{-1em}[0pt][0pt]{%
+                \makebox[0em]{%
+                    \includegraphics[align=c, height=0.7cm]{\logoname}%
+                    \hspace{2.0cm}%
+                }%
+            }%
+            % move from the border
+        }%
+ }
+
+\mode<presentation>
+ 
+\usefonttheme{default}
+
+\useinnertheme{default}
+\useoutertheme{default}
+ 
+% \setbeamerfont{author}{size=\large}
+% \setbeamerfont{date}{size=\large}
+% \setbeamerfont{example text}{series=\bfseries}
+% \setbeamerfont{frametitle}{series=\bfseries,size=\large}
+% \setbeamerfont{framesubtitle}{series=\mdseries,size=\large}
+\setbeamerfont{section}{series=\bfseries}
+\setbeamerfont{title}{series=\bfseries}
+ 
+\setbeamertemplate{navigation symbols}{}
+ 
+\mode
+<all>
