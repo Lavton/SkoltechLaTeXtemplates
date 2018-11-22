@@ -1,13 +1,20 @@
 
 \documentclass{beamer}
-\usepackage{fontspec}
-\usepackage{xunicode}
-\usepackage{xltxtra}
-\usepackage{xecyr}
-\usepackage{polyglossia}
+\usepackage{ifxetex}
+\ifxetex
+    \usepackage{fontspec}
+    \usepackage{xunicode}
+    \usepackage{xltxtra}
+    \usepackage{xecyr}
+    \usepackage{polyglossia}
+\else
+    \usepackage[T1]{fontenc}
+    \usepackage[utf8]{inputenc}
+    \usepackage{lmodern}
+\fi
 
 %% USAGE: 
-% \usepackage[logo="sklogo.png"]{beamerskoltech} 
+% \usepackage[logo=sklogo]{beamerskoltech} 
 %   if you have a stand-alone image file for Sk logo 
 % or
 % \usepackage[logo]{beamerskoltech} 
@@ -25,7 +32,7 @@
 % command `skfootnote{text}` -- put some text for current slide
 % `\renewcommand{\skbeforetitle}{\vspace{-3ex}}` is useful in case you use `aspectratio=169`
 %%%%%%%%%%%%%%%%
-\usepackage[logo]{beamerskoltech} 
+\usepackage[logo=sklogo]{beamerskoltech} 
 
 \begin{document}
 
