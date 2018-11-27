@@ -4,7 +4,7 @@
 %% It may be distributed and/or modified under the
 %% conditions of the MIT public license 
 %% USAGE: 
-% \usepackage[logo="sklogo.png"]{beamerskoltech} 
+% \usepackage[logo=sklogo]{beamerskoltech} 
 %   if you have a stand-alone image file for Sk logo 
 % or
 % \usepackage[logo]{beamerskoltech} 
@@ -64,6 +64,7 @@ iVBORw0KGgoAAAANSUhEUgAAAZAAAACTCAYAAACgXE/WAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFn
 % https://latex.org/forum/viewtopic.php?t=4392 <-- link about creating beamer thems
 % define colors (green -- for structure and gray -- for titles)
 \definecolor{skoltechgreen}{cmyk}{0.06, 0, 0.86, 0.35}
+% \definecolor{skoltechgreen}{RGB}{142, 154, 47}
 \definecolor{titlegray}{RGB}{89, 89, 89}
 \setbeamercolor{title}{fg=titlegray}
 \setbeamercolor{frametitle}{fg=titlegray}
@@ -124,6 +125,9 @@ iVBORw0KGgoAAAANSUhEUgAAAZAAAACTCAYAAACgXE/WAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFn
     }%
 }
 
+\newlength{\skfootnotelen}%
+\setlength{\skfootnotelen}{8cm}
+
 % add footer with page number and logo. 
 \setbeamertemplate{footline}{%
         %
@@ -144,7 +148,7 @@ iVBORw0KGgoAAAANSUhEUgAAAZAAAACTCAYAAACgXE/WAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFn
             \makebox[0em]{{%
                 \hfill\hfill%
                 \raisebox{0ex}[0pt][0pt]{
-                \parbox{\textwidth}{%
+                \parbox{\skfootnotelen}{%
                     \begin{center}%
                        \myfootnote%
                     \end{center}%
